@@ -28,7 +28,7 @@ To maintain blistering speed and absolute clarity, we actively rejected standard
 2. **Database Storage**: Removed entirely. Files are processed in volatile memory to ensure absolute student privacy and zero-trust data handling.
 3. **Subjective Professor Ratings**: Cut to prevent the tool from becoming a subjective gossip board, maintaining a purely objective, logic-based utility.
 4. **Rich-Text Editing**: We do not allow users to fix the essay inside the app. This prevents academic dishonesty and keeps the cognitive load strictly on identification, not resolution.
-5. **Extraneous API Routing**: Bypassed standard OCR text extraction (e.g., PyMuPDF) and routed raw PDFs directly to Gemini 2.5 Flash Multimodal to shave 4+ seconds off server latency.
+5. **Extraneous Network Payloads**: Cut the standard approach of blindly feeding 50MB multi-modal PDFs across the internet. We built an instant `PyMuPDF` pre-processor on the backend that surgically extracts pure strings locally, turning massive documents into microscopic text payloads before hitting the LLM. Speed to value is mathematically guaranteed.
 
 ## ⏱️ Timing Notes
 *Stopwatch tested: First success achieved from file drop to final hit-list render in exactly **8.4 seconds**.*

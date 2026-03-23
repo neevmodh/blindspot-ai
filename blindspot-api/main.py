@@ -6,6 +6,7 @@ POST /api/check-blindspot
 import json
 import os
 import re
+import fitz # PyMuPDF
 from typing import Literal
 
 import google.generativeai as genai
@@ -89,34 +90,34 @@ async def check_blindspot(
 
     # ── Call Gemini 2.5 Flash ──────────────────────────────────────────────
     try:
+        # Extract Text locally
+        doc_rubric = fitz.open(stream=rubric_bytes, filetype="pdf")
+        if doc_rubric.is_encrypted:
+            raise Exception("encrypted PDF")
+        rubric_text = chr(12).join([page.get_text() for page in doc_rubric])
+        doc_rubric.close()
+
+        doc_work = fitz.open(stream=work_bytes, filetype="pdf")
+        if doc_work.is_encrypted:
+            raise Exception("encrypted PDF")
+        work_text = chr(12).join([page.get_text() for page in doc_work])
+        doc_work.close()
+
         model = genai.GenerativeModel(
             model_name="gemini-2.5-flash",
             system_instruction=system_prompt,
         )
 
-        rubric_part = {
-            "inline_data": {
-                "mime_type": "application/pdf",
-                "data": rubric_bytes,
-            }
-        }
-        work_part = {
-            "inline_data": {
-                "mime_type": "application/pdf",
-                "data": work_bytes,
-            }
-        }
-
         user_message = (
             "DOCUMENT 1 — RUBRIC/PROMPT:\n"
-            "[See attached PDF above]\n\n"
+            f"{rubric_text}\n\n"
             "DOCUMENT 2 — STUDENT WORK:\n"
-            "[See attached PDF above]\n\n"
+            f"{work_text}\n\n"
             "Analyze the student work against the rubric. Return ONLY the JSON object as instructed."
         )
 
         response = model.generate_content(
-            [rubric_part, work_part, user_message],
+            user_message,
             generation_config=genai.GenerationConfig(
                 temperature=0.1,
                 response_mime_type="application/json",

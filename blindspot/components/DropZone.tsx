@@ -32,7 +32,7 @@ export default function DropZone({
       if (rejected.length > 0) {
         const err = rejected[0].errors[0];
         if (err.code === "file-too-large") {
-          setRejection("File too large. Compress under 4MB to keep things lightning fast.");
+          setRejection("File too large. Compress under 50MB to keep things lightning fast.");
         } else if (err.code === "file-invalid-type") {
           setRejection("Only PDF files are accepted.");
         } else {
@@ -46,7 +46,7 @@ export default function DropZone({
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: { "application/pdf": [".pdf"] },
-    maxSize: 4 * 1024 * 1024,
+    maxSize: 50 * 1024 * 1024,
     maxFiles: 1,
   });
 
