@@ -112,7 +112,7 @@ export default function Home() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <DropZone
                     label="Rubric / Prompt"
-                    sublabel="PDF only · 50 MB max"
+                    sublabel="PDF only · 4 MB max"
                     icon={<RubricIcon />}
                     file={rubricFile}
                     onFile={setRubricFile}
@@ -120,7 +120,7 @@ export default function Home() {
                   />
                   <DropZone
                     label="Your Work"
-                    sublabel="PDF only · 50 MB max"
+                    sublabel="PDF only · 4 MB max"
                     icon={<WorkIcon />}
                     file={workFile}
                     onFile={setWorkFile}
