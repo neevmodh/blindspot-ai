@@ -90,17 +90,27 @@ async def check_blindspot(
 
     # ── Call Gemini 2.5 Flash ──────────────────────────────────────────────
     try:
-        # Extract Text locally
+        # Extract Text locally (Optimized with early-exit truncation)
         doc_rubric = fitz.open(stream=rubric_bytes, filetype="pdf")
         if doc_rubric.is_encrypted:
             raise Exception("encrypted PDF")
-        rubric_text = chr(12).join([page.get_text() for page in doc_rubric])
+        rubric_text = ""
+        for page in doc_rubric:
+            rubric_text += page.get_text() + "\n"
+            if len(rubric_text) > 30000:
+                rubric_text = rubric_text[:30000] + "\n...[TRUNCATED]"
+                break
         doc_rubric.close()
 
         doc_work = fitz.open(stream=work_bytes, filetype="pdf")
         if doc_work.is_encrypted:
             raise Exception("encrypted PDF")
-        work_text = chr(12).join([page.get_text() for page in doc_work])
+        work_text = ""
+        for page in doc_work:
+            work_text += page.get_text() + "\n"
+            if len(work_text) > 150000:
+                work_text = work_text[:150000] + "\n...[TRUNCATED]"
+                break
         doc_work.close()
 
         model = genai.GenerativeModel(
@@ -122,6 +132,7 @@ async def check_blindspot(
                 temperature=0.1,
                 response_mime_type="application/json",
             ),
+            request_options={"timeout": 45.0} # Guaranteed sub-60s fallback
         )
 
         raw_text = response.text
