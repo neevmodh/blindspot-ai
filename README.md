@@ -1,5 +1,4 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/React-Dark.svg" width="60" alt="Logo" />
   <h1>Blindspot 👁️</h1>
   <p><strong>A 10-second academic requirement checker built for the Clarity Track Hackathon.</strong></p>
 
