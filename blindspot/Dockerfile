@@ -25,12 +25,9 @@ ENV NODE_ENV=production
 ENV PORT=10000
 ENV HOSTNAME=0.0.0.0
 
-# Copy standalone server
+# Copy standalone server and static files
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
-
-# public/ is optional — only copy if it exists
-COPY --from=builder /app/public* ./public/
 
 EXPOSE 10000
 
