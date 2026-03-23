@@ -1,0 +1,31 @@
+# Environment Variables
+.env
+.env.local
+.env.*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.pytest_cache/
+
+# Next.js / Node
+node_modules/
+.next/
+out/
+build/
+.pnp.*
+.swc
+
+# macOS
+.DS_Store
+
+# IDEs
+.idea/
+.vscode/
+
+# Test files
+test.pdf
+empty.pdf
