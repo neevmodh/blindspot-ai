@@ -1,7 +1,4 @@
 # render.yaml — Render Blueprint for Blindspot AI
-# Deploys both the FastAPI backend and Next.js frontend as separate services.
-# Docs: https://render.com/docs/blueprint-spec
-
 services:
   # ── Backend (FastAPI) ────────────────────────────────────────────────────
   - type: web
@@ -23,5 +20,5 @@ services:
     plan: free
     envVars:
       - key: NEXT_PUBLIC_API_URL
-        # Replace with your actual blindspot-api Render URL after first deploy
+        # Set to your blindspot-api Render URL after backend is live
         value: https://blindspot-api.onrender.com

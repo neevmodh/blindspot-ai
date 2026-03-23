@@ -10,7 +10,7 @@ RUN npm ci
 
 COPY . .
 
-# NEXT_PUBLIC_API_URL must be set at build time for Next.js rewrites
+# Baked in at build time by Next.js
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 
@@ -22,12 +22,16 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
+ENV PORT=10000
+ENV HOSTNAME=0.0.0.0
 
-# Copy only what's needed to run the server
-COPY --from=builder /app/public ./public
+# Copy standalone server
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
-EXPOSE 3000
+# public/ is optional — only copy if it exists
+COPY --from=builder /app/public* ./public/
+
+EXPOSE 10000
 
 CMD ["node", "server.js"]
